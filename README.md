@@ -1,3 +1,3 @@
 # Dubhacks2017  
-xD
-jlujlu123s
+Snapchat but with words.
+
