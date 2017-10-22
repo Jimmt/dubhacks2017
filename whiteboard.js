@@ -3,7 +3,8 @@ var down, eraser, colors;
 var size;
 
 const CLICKED = "red";
-const NOT_CLICKED = "white";
+const NOT_CLICKED = "#90caf9";
+const NOT_CLICKED_RGB = "rgb(144, 202, 249)";
 const HOVER = "yellow";
 
 window.onload = function() {
@@ -20,7 +21,11 @@ function initCanvas() {
 	c.addEventListener('mousedown', startDraw, false);
 	c.addEventListener('mousemove', drawPt, false);
 	c.addEventListener('mouseup', stopDraw, false);
-	document.getElementById('brush').style.backgroundColor = CLICKED;
+	var buttons = document.getElementsByClassName('button');
+	buttons[0].style.backgroundColor = CLICKED;
+	for (var i = 1; i < buttons.length; i++) {
+		buttons[i].style.backgroundColor = NOT_CLICKED;
+	}
 }
 
 function initButtons() {
@@ -67,7 +72,7 @@ function initButtons() {
 
 	for (var i = 0; i < buttons.length; i++) {
 		buttons[i].addEventListener('mouseenter', function(e) {
-			if (!e.target.style.backgroundColor || e.target.style.backgroundColor == NOT_CLICKED) {
+			if (!e.target.style.backgroundColor || e.target.style.backgroundColor == NOT_CLICKED || e.target.style.backgroundColor == NOT_CLICKED_RGB) {
 				e.target.style.backgroundColor = HOVER;
 			}
 		}, false);
@@ -83,8 +88,8 @@ function initButtons() {
 function extendSizes(extend) {
 	var buttons = document.getElementsByClassName('sizechoice');
 	var sizes = document.getElementById('size');
-	document.getElementById('sizeWrapper').style.height = (extend) ? '80px' : '40px';
-	document.getElementById('sizerow').style.maxHeight = (extend) ? '40px' : '0px';
+	document.getElementById('sizeWrapper').style.width = (extend) ? '80px' : '40px';
+	document.getElementById('sizerow').style.maxWidth = (extend) ? '40px' : '0px';
 	for (var i = 0; i < buttons.length; i++) {
 		if (extend) {
 			buttons[i].style.maxHeight = "40px";
@@ -100,15 +105,13 @@ function extendSizes(extend) {
 }
 
 function extendColors(extend) {
-	var color = document.getElementById('colorWrapper');
+	var color = document.getElementById('color');
 	if (extend) {
-		color.style.maxHeight = "80px";
-		color.children[1].style.display = "block";
-		color.children[0].style.backgroundColor = CLICKED;
+		color.style.backgroundColor = CLICKED;
+		color.jscolor.show();
 	} else {
-		color.style.maxHeight = "40px";
-		color.children[1].style.display = "none";
-		color.children[0].style.backgroundColor = NOT_CLICKED;
+		color.style.backgroundColor = NOT_CLICKED;
+		color.jscolor.hide();
 	}
 }
 
