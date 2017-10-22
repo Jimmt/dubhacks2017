@@ -1,112 +1,113 @@
 #c {
-	box-sizing: border-box;
-	width: 100%;
-	height: 100%;
-	cursor: url(img/csr/1_filled.png), auto;
-	z-index: 0;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    cursor: url(img/csr/1_filled.png), auto;
+    z-index: 0;
 }
 
 #canvasWrapper {
-	width: 50%;
-	height: 90%;
-	position: relative;
+    width: 50%;
+    height: 90%;
+    position: relative;
+    flex: 1;
 }
 
 #canvasRow {
-	display: flex;
-	height: 40px;
-	width: 100%;
+    display: flex;
+    height: 40px;
+    width: 100%;
 }
 
 .canvas-button {
-	position: relative;
-	margin-top: 10px;
-	margin-left: 5px;
-	width: 40px;
-	height: 40px;
-	border-radius: 50%;
+    position: relative;
+    margin-top: 10px;
+    margin-left: 5px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
 }
 
 #newPage {
-	margin-left: auto;
+    margin-left: auto;
 }
 
 body {
-	overflow: hidden;
+    overflow: hidden;
 }
 
 #buttons {
-	margin-left: 10px;
-	display: flex;
-	width: 100%;
-	width: 40px;
-	text-align: center;
-	flex-direction: column;
+    margin-left: 10px;
+    display: flex;
+    width: 100%;
+    width: 40px;
+    text-align: center;
+    flex-direction: column;
 }
 
 .button {
-	width: 40px;
-	height: 40px;
-	line-height: 1em;
-	cursor: pointer;
-	position: relative;
-	border-radius: 50%;
-	margin-bottom: 5px;
+    width: 40px;
+    height: 40px;
+    line-height: 1em;
+    cursor: pointer;
+    position: relative;
+    border-radius: 50%;
+    margin-bottom: 5px;
 }
 
 #sizeWrapper {
-	display: flex;
-	z-index: 0;
-	justify-items: center;
-	height: 45px;
-	width: 80px;
+    display: flex;
+    z-index: 0;
+    justify-items: center;
+    height: 45px;
+    width: 80px;
 }
 
 #sizerow {
-	margin-left: 5px;
-	display: flex;
-	flex-direction: column;
-	height: 160px;
-	width: 40px;
-	overflow-x: visible;
-	z-index: 0;
-	}
+    margin-left: 5px;
+    display: flex;
+    flex-direction: column;
+    height: 160px;
+    width: 40px;
+    overflow-x: visible;
+    z-index: 0;
+}
 
 .sizechoice {
-	height: 40px;
-	width: 40x;
-	cursor: url(img/csr/2.png), auto;
-	z-index: 1;
-	transition: max-height 0.2s ease-out;
-	cursor: pointer;
-	position: relative;
-	border-radius: 50%;
-	margin-bottom: 5px;
+    height: 40px;
+    width: 40x;
+    cursor: url(img/csr/2.png), auto;
+    z-index: 1;
+    transition: max-height 0.2s ease-out;
+    cursor: pointer;
+    position: relative;
+    border-radius: 50%;
+    margin-bottom: 5px;
 }
 
 .sizechoice:hover {
-	background-color: yellow;
+    background-color: yellow;
 }
 
 img {
-	position: absolute;
-	margin: auto;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	border-radius: 50%;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 50%;
 }
 
 
 #color {
-	padding: 0;
-	border: none;
-	background: none;
+    padding: 0;
+    border: none;
+    background: none;
 }
 
 #color:focus {
-	outline: none;
+    outline: none;
 }
 
 :root {
@@ -119,8 +120,9 @@ img {
 }
 
 #whiteboard {
-	display: flex;
-	align-items: flex-end;
+    display: flex;
+    align-items: flex-end;
+    flex: 1;
 }
 
 .raised {
@@ -128,11 +130,11 @@ img {
 }
 
 .textbox {
-	border: 0px;
-	background-color: transparent;
-	z-index: -1;
+    border: 0px;
+    background-color: transparent;
+    z-index: -1;
 }
 
 .textbox:focus {
-	outline: none;
+    outline: none;
 }

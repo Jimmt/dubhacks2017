@@ -3,45 +3,40 @@
 <head>
     <script src="resources/socket.io.js"></script>
     <script type="text/javascript" src="cookies.js"></script>
-    <script src="https://github.com/feross/simple-peer/blob/master/simplepeer.min.js"></script>
     <script src="tutor.js"></script>
-    	<link rel="stylesheet" type="text/css" href="whiteboard.css">
+    <link rel="stylesheet" type="text/css" href="whiteboard.css">
     <script src="whiteboard.js"></script>
     <script src="jscolor.js"></script>
     <link rel="stylesheet" href="tutor.css"></link>
 </head>
 
 <body>
-</head>
-
-<body>
-	<div id="whiteboard">
-		<div id="canvasWrapper">
-			<canvas id='c' class="raised"></canvas>
-			<div id=canvasRow>
-				<div id="prevPage" class="canvas-button raised-small"><img src="img/btn/arrow-left-thick.png"></div>
-				<div id="nextPage" class="canvas-button raised-small"><img src="img/btn/arrow-right-thick.png"></div>
-				<div id="newPage" class="canvas-button raised-small"><img src="img/btn/plus.png"></div>
-			</div>
-		</div>
-		<div id="buttons">
-			<div class="button raised-small" id="brush"><img src="img/btn/brush.png"></div>
-			<div class="button raised-small" id="eraser"><img src="img/btn/eraser.png"></div>
-			<div class="button raised-small" id="text"><img src="img/btn/textbox-password.png"></div>
-			<div id="sizeWrapper">
-				<div class="button raised-small" id="size"><img src="img/btn/circle.png"></div>
-				<div id="sizerow">
-					<div class="sizechoice raised-small"><img src="img/csr/1_filled.png"></div>
-					<div class="sizechoice raised-small"><img src="img/csr/2_filled.png"></div>
-					<div class="sizechoice raised-small"><img src="img/csr/4_filled.png"></div>
-					<div class="sizechoice raised-small"><img src="img/csr/8_filled.png"></div>
-				</div>
-			</div>
-			<button class="button raised-small jscolor{valueElement: null, value:'#000000', padding:0, shadow:false, borderWidth: 0, onFineChange:'update(this)', width:100, height: 100, position:'right'}" id="color"><img src="img/btn/palette.png"></button>
-			<div class="button raised-small" id="clear"><img src="img/btn/window-close.png"></div>
-		</div>
-	</div>
->>>>>>> origin/canvasTest
+    <div id="whiteboard">
+        <div id="canvasWrapper">
+            <canvas id='c' class="raised"></canvas>
+            <div id=canvasRow>
+                <div id="prevPage" class="canvas-button raised-small"><img src="img/btn/arrow-left-thick.png"></div>
+                <div id="nextPage" class="canvas-button raised-small"><img src="img/btn/arrow-right-thick.png"></div>
+                <div id="newPage" class="canvas-button raised-small"><img src="img/btn/plus.png"></div>
+            </div>
+        </div>
+        <div id="buttons">
+            <div class="button raised-small" id="brush"><img src="img/btn/brush.png"></div>
+            <div class="button raised-small" id="eraser"><img src="img/btn/eraser.png"></div>
+            <div class="button raised-small" id="text"><img src="img/btn/textbox-password.png"></div>
+            <div id="sizeWrapper">
+                <div class="button raised-small" id="size"><img src="img/btn/circle.png"></div>
+                <div id="sizerow">
+                    <div class="sizechoice raised-small"><img src="img/csr/1_filled.png"></div>
+                    <div class="sizechoice raised-small"><img src="img/csr/2_filled.png"></div>
+                    <div class="sizechoice raised-small"><img src="img/csr/4_filled.png"></div>
+                    <div class="sizechoice raised-small"><img src="img/csr/8_filled.png"></div>
+                </div>
+            </div>
+            <button class="button raised-small jscolor{valueElement: null, value:'#000000', padding:0, shadow:false, borderWidth: 0, onFineChange:'update(this)', width:100, height: 100, position:'right'}" id="color"><img src="img/btn/palette.png"></button>
+            <div class="button raised-small" id="clear"><img src="img/btn/window-close.png"></div>
+        </div>
+    </div>
     <div id="right-side">
         <video id="video" autoplay="true"></video>
         <div id="chat-container">
