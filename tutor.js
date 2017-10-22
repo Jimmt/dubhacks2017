@@ -21,6 +21,11 @@ function setupListeners() {
         addMessage(socket.msg, false);
     });
 
+    socket.on("stream", function(data){
+        console.log("theirs");
+        $("their-video").srcObject = data.stream;
+    });
+
     $("textfield").onkeypress = function(event) {
         if (event.which == 13 || event.keyCode == 13) {
             var msg = processMessage($("textfield").value);
@@ -38,8 +43,11 @@ function processMessage(text) {
 
 function addMessage(text, clear) {
     var line = document.createElement("div");
-    line.className = "line";
-    line.innerHTML = text;
+    line.classList.add("line");
+    if (clear) line.classList.add("mine");
+    var innerText = document.createElement("p");
+    innerText.innerHTML = text;
+    line.appendChild(innerText);
     $("chat").appendChild(line);
     if (clear) $("textfield").value = "";
 }
