@@ -82,7 +82,9 @@
 
             var left = document.createElement("img");
             left.src = "resources/arrow_left.svg";
+            left.style.cursor = "pointer";
             var right = document.createElement("img");
+            right.style.cursor = "pointer";
             right.src = "resources/arrow_right.svg";
             var leftButton = document.createElement("div");
             leftButton.appendChild(left);
@@ -94,14 +96,19 @@
             rightButton.style = "display: inline-block; margin-left: 5px";
             leftButton.onclick = function() {
                 if (index > 0) {
+                	rightButton.style.opacity = 1;
                     $("search").innerHTML = "";
-                    $("search").appendChild(tutorBlocks[--index]);
+                    index -= 1;
+                    $("search").appendChild(tutorBlocks[index]);
                 }
             };
             rightButton.onclick = function() {
                 if (index < tutorBlocks.length - 1) {
+                	leftButton.style.opacity = 1;
                     $("search").innerHTML = "";
-                    $("search").appendChild(tutorBlocks[++index]);
+                    index += 1;
+                    $("search").appendChild(tutorBlocks[index]);
+                    console.log(tutorBlocks);
                 }
             };
 
@@ -119,7 +126,7 @@
             block.appendChild(selectButton);
             block.appendChild(arrowButtons);
         });
-        $("title").innerHTML = isTutor ? "Pick a tutor" : "Pick a student";
+        $("title").innerHTML = !isTutor ? "Pick a tutor" : "Pick a student";
         $("search").innerHTML = "";
         $("search").appendChild(tutorBlocks[0]);
         // window.location.href = "/tutor.html";
@@ -127,6 +134,7 @@
         backButton.id = "submit-button";
         var p = document.createElement("p")
         p.innerHTML = "Back";
+        p.id = "backButton";
         backButton.appendChild(p);
         $("body").appendChild(backButton);
         backButton.onclick = function() {

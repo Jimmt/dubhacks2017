@@ -110,10 +110,6 @@ img {
     outline: none;
 }
 
-:root {
-    --primary-color: #90caf9;
-    --secondary-color: rgb(220, 220, 220);
-}
 
 .raised-small {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3);

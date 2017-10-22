@@ -166,7 +166,7 @@ function initButtons() {
 		if (curr == total - 1 || total == 1) {
 			return;
 		}
-		canvases[curr] = ctx.getImageData(0, 0, c.width, c.height);
+		canvases[curr] = ctx.getImageData(0, 0, c.width, c.height)
 		curr++;
 		if (curr == canvases.length - 1) {
 			nextPage.style.opacity = 0.2;
