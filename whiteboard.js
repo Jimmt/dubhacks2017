@@ -28,18 +28,20 @@ load = function() {
 		ctx.fillText(data.text, data.left, data.top, data.max);
 	});
 	socket.on("createPage", function(data) {
-		canvases[data.curr] = data.data;
-		total = data.total;
-		curr = total - 1;
-		document.getElementById('counter').innerHTML = total + '/' + total;
+		var data = ctx.getImageData(0, 0, c.width, c.height);
+		canvases[curr] = data;
+		curr = total;
+		total++;
 		reset();
 		prevPage.style.opacity = 1.0;
 		nextPage.style.opacity = 0.2;
+		document.getElementById('counter').innerHTML = (curr + 1) + '/' + total;
 	});
 	socket.on("nextPage2", function(data) {
-		canvases[data.old] = data.data;
-		curr = data.curr;
-		document.getElementById('counter').innerHTML = (curr + 1) + "/" + total;
+		canvases[curr] = ctx.getImageData(0, 0, c.width, c.height)
+		var data = canvases[curr];
+		curr++;
+		document.getElementById('counter').innerHTML = (curr + 1) + '/' + total;
 		if (curr == canvases.length - 1) {
 			nextPage.style.opacity = 0.2;
 		}
@@ -48,15 +50,16 @@ load = function() {
 		ctx.putImageData(canvases[curr], 0, 0);	
 	});
 	socket.on("prevPage2", function(data) {
-		canvases[data.old] = data.data;
-		curr = data.curr;
-		document.getElementById('counter').innerHTML = (curr + 1) + "/" + total;
+		canvases[curr] = ctx.getImageData(0, 0, c.width, c.height);
+		var data = canvases[curr];
+		curr--;
+		document.getElementById('counter').innerHTML = (curr + 1) + '/' + total;
 		if (curr == 0) {
 			prevPage.style.opacity = 0.2;
 		}
 		nextPage.style.opacity = 1.0;
 		reset();
-		ctx.putImageData(canvases[curr], 0, 0);	
+		ctx.putImageData(canvases[curr], 0, 0);
 	});
 	socket.on("clearPage", function(data) {
 		drawing = false;
@@ -218,7 +221,6 @@ function initButtons() {
 			return;
 		}
 		canvases[curr] = ctx.getImageData(0, 0, c.width, c.height);
-		var data = canvases[curr];
 		curr--;
 		document.getElementById('counter').innerHTML = (curr + 1) + '/' + total;
 		if (curr == 0) {
@@ -227,19 +229,13 @@ function initButtons() {
 		nextPage.style.opacity = 1.0;
 		reset();
 		ctx.putImageData(canvases[curr], 0, 0);
-		socket.emit("prevPage", {
-			old: old,
-			curr: curr,
-			data: data
-		});
+		socket.emit("prevPage");
 	});
 	nextPage.addEventListener('mousedown', function(e) {
 		if (curr == total - 1 || total == 1) {
 			return;
 		}
-		var old = curr;
 		canvases[curr] = ctx.getImageData(0, 0, c.width, c.height)
-		var data = canvases[curr];
 		curr++;
 		document.getElementById('counter').innerHTML = (curr + 1) + '/' + total;
 		if (curr == canvases.length - 1) {
@@ -248,27 +244,18 @@ function initButtons() {
 		prevPage.style.opacity = 1.0;
 		reset();
 		ctx.putImageData(canvases[curr], 0, 0);	
-		socket.emit("nextPage", {
-			old: old,
-			curr: curr,
-			data: data
-		});
+		socket.emit("nextPage");
 	});
 	newPage.addEventListener('mousedown', function(e) {
 		var data = ctx.getImageData(0, 0, c.width, c.height);
 		canvases[curr] = data;
-		var old = curr;
 		curr = total;
 		total++;
 		reset();
 		prevPage.style.opacity = 1.0;
 		nextPage.style.opacity = 0.2;
 		document.getElementById('counter').innerHTML = (curr + 1) + '/' + total;
-		socket.emit("newPage", {
-			total: total,
-			curr: old,
-			data: data
-		});
+		socket.emit("newPage");
 	});
 }
 
