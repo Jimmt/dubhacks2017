@@ -1,23 +1,65 @@
-"use strict";
+var ctx, drawing;
 
-const express = require("express");
-const app = express();
-const http = require("http");
+window.onload = function() {
+	initCanvas();
+	initButtons();
+};
 
-var server = http.createServer(app);
-const io = require("socket.io")(server);
+function initCanvas() {
+	var c = document.getElementById('c');
+	ctx = c.getContext("2d");
+	c.height = c.clientHeight;
+	c.width = c.clientWidth;
+	console.log(c.height);
+	drawing = false;
+	c.addEventListener('mousedown', startDraw, false);
+	c.addEventListener('mousemove', drawPt, false);
+	c.addEventListener('mouseup', stopDraw, false);
+	colorButtons(0);
+}
 
-app.use(express.static(__dirname + "/"));
+function initButtons() {
+	var buttons = document.getElementsByClassName('button');
+	buttons[0].onclick = function() {
+		ctx.strokeStyle = "#000000";
+		ctx.lineWidth = 1;
+		colorButtons(0);
+	}
+	buttons[1].onclick = function() {
+		ctx.strokeStyle ="#FFFFFF";
+		ctx.lineWidth = 10;
+		colorButtons(1);
+	}
+}
 
-app.get("/", function(req, res) {
-	res.sendFile(__dirname +'/index.html');
-});
+function colorButtons(k) {
+	var buttons = document.getElementsByClassName('button');
+	for (var i = 0; i < buttons.length; i++) {
+		if (i == k) {
+			buttons[i].style.backgroundColor = "red";
+		} else {
+			buttons[i].style.backgroundColor = "white";
+		}
+	}
+}
 
-io.on("connection", function(socket) {
-	console.log("connected");
-	socket.emit("connected");
-});
+function startDraw(e) {
+	var currX = e.clientX - c.offsetLeft + 0.5;
+	var currY = e.clientY - c.offsetTop + 0.5;
+	ctx.beginPath();
+	ctx.moveTo(currX, currY);
+	drawing = true;
+}
 
-server.listen(process.env.PORT || 5000, function() {
-    console.log("listening on 5000");
-});
+function drawPt(e) {
+	if (drawing) {
+		var currX = e.clientX - c.offsetLeft + 0.5;
+		var currY = e.clientY - c.offsetTop + 0.5;
+		ctx.lineTo(currX, currY);
+		ctx.stroke();
+	}
+}
+
+function stopDraw(e) {
+	drawing = false;
+}

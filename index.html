@@ -1,18 +1,17 @@
 <html>
 
 <head>
-    <script src="resources/socket.io.js"></script>
-    <script src="client.js"></script>
-    <style type="text/css">
-    	* {
-    		
-    	}
-    </style>
+	<link rel="stylesheet" type="text/css" href="index.css">
+    <script src="index.js"></script>
 </head>
 
 <body>
-    <textarea rows=10 cols=50 id="chat"></textarea>
-    <input type="text" id="textfield">
+	<div id="buttons">
+		<div class="button" id="brush">brush</div>
+		<div class="button" id="eraser">eraser</div>
+		<div class="button" id="colors">colors</div>
+	</div>
+	<canvas id='c'></canvas>
 </body>
 
 </html>
