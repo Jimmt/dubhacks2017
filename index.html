@@ -1,18 +1,68 @@
 <html>
 
 <head>
-    <script src="resources/socket.io.js"></script>
-    <script src="client.js"></script>
-    <style type="text/css">
-    	* {
-    		
-    	}
-    </style>
+    <link rel="stylesheet" href="client.css"></link>
+    <script type="text/javascript">
+    var subjects2 = [
+        ["Geometry", "Algebra", "Calculus", "Linear Algebra"],
+        ["Mechanics", "E & M", "Waves"],
+        ["Java", "Python", "C++", "C"],
+    ];
+
+    var $ = function(id) {
+        return document.getElementById(id);
+    };
+
+    window.onload = function() {
+        selectSubject();
+        $("primary-subjects").onchange = function() {
+            selectSubject();
+        };
+    }
+
+    var selectSubject = function() {
+        $("secondary-subjects").innerHTML = "";
+        var index = $("primary-subjects").selectedIndex;
+        var subs = subjects2[index];
+        subs.forEach(function(s) {
+            var subject = document.createElement("div");
+            subject.id = "secondary-subject";
+            subject.classList.add("hover-button");
+            subject.classList.add("raised-small");
+            subject.innerHTML = "<p id='inner-text'>" + s + "</p>";
+            $("secondary-subjects").appendChild(subject);
+        });
+    }
+    </script>
 </head>
 
 <body>
-    <textarea rows=10 cols=50 id="chat"></textarea>
-    <input type="text" id="textfield">
+    <div id="header">
+        <h1>Create your profile</h1>
+    </div>
+    <div id="search" class="raised">
+        <div class="input-row">
+            <span>Name</span>
+            <div class="wrapper">
+                <input type="text" id="name-field">
+            </div>
+        </div>
+        <div class="input-row">
+            <span>Subject</span>
+            <div class="wrapper">
+                <select id="primary-subjects">
+                    <option value="Math">Math</option>
+                    <option value="Physics">Physics</option>
+                    <option value="Programming">Computer Science</option>
+                </select>
+            </div>
+            <div id="secondary-subjects">
+            </div>
+            <div id="submit-button" class="hover-button">
+                Submit
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

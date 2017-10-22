@@ -15,7 +15,9 @@ app.get("/", function(req, res) {
 
 io.on("connection", function(socket) {
 	console.log("connected");
-	socket.emit("connected");
+	socket.on("newMessage", function(data){
+		socket.broadcast.emit("otherMessage", {msg: data.msg});
+	});
 });
 
 server.listen(process.env.PORT || 5000, function() {
