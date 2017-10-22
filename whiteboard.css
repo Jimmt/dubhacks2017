@@ -74,8 +74,8 @@ body {
 }
 
 .sizechoice {
-    height: 40px;
-    width: 40x;
+    height: 45px;
+    width: 35px;
     cursor: url(img/csr/2.png), auto;
     z-index: 1;
     transition: max-height 0.2s ease-out;

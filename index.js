@@ -25,9 +25,9 @@ io.on("connection", function(socket) {
     socket.on("drawing", function(data) {
         socket.broadcast.emit("drawLine", data);
     });
-    socket.on("pageChange", function(data) {
-        socket.broadcast.emit("drawPage", data);
-    })
+    socket.on("text", function(data) {
+        socket.broadcast.emit("drawText", data);
+    });
 });
 
 

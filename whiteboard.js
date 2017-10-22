@@ -22,6 +22,11 @@ load = function() {
 	initSizes();
 	ctx.save();
 	socket.on("drawLine", drawLine);
+	socket.on("drawText", function(data) {
+		ctx.font = data.font;
+		ctx.fillStyle = data.color;
+		ctx.fillText(data.text, data.left, data.top, data.max);
+	});
 };
 
 function drawLine(data) {
@@ -154,8 +159,6 @@ function initButtons() {
 	for (var i = 0; i < buttons.length; i++) {
 		buttons[i].style.backgroundColor = NOT_CLICKED;
 		buttons[i].addEventListener('mouseenter', function(e) {
-			console.log(e.target.style.backgroundColor);
-			console.log(NOT_CLICKED_RGB)
 			if ((e.target.style.backgroundColor == NOT_CLICKED || e.target.style.backgroundColor == NOT_CLICKED_RGB) && e.target.style.opacity == 1) {
 				e.target.style.backgroundColor = HOVER;
 			}
@@ -287,6 +290,7 @@ function startDraw(e) {
 		var currY = e.clientY - c.offsetTop + 0.5;
 		ctx.moveTo(currX, currY);
 		ctx.beginPath();
+		ctx.strokeStyle = jscolor;
 		extendSizes(false);
 		drawing = true;
 		colors = false;
@@ -325,11 +329,12 @@ function stopDraw(e) {
 		input.id = "test";
 		input.className = 'textbox';
 		input.style.position = "absolute";
-		input.style.left = e.clientX - c.offsetLeft;
-		input.style.top = e.clientY - c.offsetTop;
+		input.style.left = e.clientX - c.offsetLeft + "px";
+		input.style.top = e.clientY - c.offsetTop + "px";
 		input.style.width = "5px";
 		input.style.fontSize = size * 8 + "px";
 		input.style.color = jscolor;
+		input.style.zIndex = 1;
 		document.getElementById("canvasWrapper").append(input);
 		input.focus();
 		input.onkeyup = function() {
@@ -342,6 +347,25 @@ function stopDraw(e) {
 			document.body.removeChild(temp);
 			input.style.width = Math.min(width + (input.style.fontSize.substring(0, input.style.fontSize.length - 2) / 2 + 4), c.width - input.style.left.substring(0, input.style.left.length - 2)) + "px";
 		}
+		input.addEventListener('mouseenter', function(e) {
+			if(drawing) {
+				input.style.zIndex = -1;
+			}
+		});
+		input.addEventListener('blur', function(e) {
+			ctx.font = input.style.fontSize + " Lato";
+			ctx.fillStyle = input.style.color;
+			ctx.fillText(input.value, input.style.left.substring(0, input.style.left.length - 2), +input.style.top.substring(0, input.style.top.length - 2) + input.getBoundingClientRect().height, input.style.width.substring(0, input.style.width.length - 2));
+			socket.emit("text", {
+				font: ctx.font,
+				color: ctx.fillStyle,
+				text: input.value,
+				left: input.style.left.substring(0, input.style.left.length - 2),
+				top: +input.style.top.substring(0, input.style.top.length - 2) + input.getBoundingClientRect().height,
+				max: input.style.width.substring(0, input.style.width.length - 2)
+			});
+			document.getElementById('canvasWrapper').removeChild(input);
+		});
 	}
 }
 
@@ -363,5 +387,4 @@ function csrFormat(num, filled) {
 
 function update(color) {
 	jscolor = '#' + color;
-	ctx.strokeStyle = jscolor;
 }
