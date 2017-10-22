@@ -9,20 +9,24 @@
 
 <body>
 	<div id="whiteboard">
-		<canvas id='c' class="raised"></canvas>
+		<div id="canvasWrapper">
+			<canvas id='c' class="raised"></canvas>
+		</div>
 		<div id="buttons">
 			<div class="button raised-small" id="brush"><img src="img/btn/brush.png"></div>
 			<div class="button raised-small" id="eraser"><img src="img/btn/eraser.png"></div>
+			<div class="button raised-small" id="text"><img src="img/btn/textbox-password.png"></div>
 			<div id="sizeWrapper">
 				<div class="button raised-small" id="size"><img src="img/btn/circle.png"></div>
 				<div id="sizerow">
-					<div class="sizechoice"><img src="img/csr/1_filled.png"></div>
-					<div class="sizechoice"><img src="img/csr/2_filled.png"></div>
-					<div class="sizechoice"><img src="img/csr/4_filled.png"></div>
-					<div class="sizechoice"><img src="img/csr/8_filled.png"></div>
+					<div class="sizechoice raised-small"><img src="img/csr/1_filled.png"></div>
+					<div class="sizechoice raised-small"><img src="img/csr/2_filled.png"></div>
+					<div class="sizechoice raised-small"><img src="img/csr/4_filled.png"></div>
+					<div class="sizechoice raised-small"><img src="img/csr/8_filled.png"></div>
 				</div>
 			</div>
 			<button class="button raised-small jscolor{valueElement: null, value:'#000000', padding:0, shadow:false, borderWidth: 0, onFineChange:'update(this)', width:100, height: 100, position:'right'}" id="color"><img src="img/btn/palette.png"></button>
+			<div class="button raised-small" id="clear"><img src="img/btn/window-close.png"></div>
 		</div>
 	</div>
 </body>
