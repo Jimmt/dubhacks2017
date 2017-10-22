@@ -63,10 +63,10 @@
             inputRow2.appendChild(skill);
             var inputRow3 = createInputRow();
             var container = document.createElement("div");
-            var subjects = read_cookie("data").subsubject;
+            var subjects = document.querySelectorAll("#inner-text");
             for (var i = 0; i < subjects.length; i++) {
                 if (i == 0 || Math.floor(Math.random() * 2) == 1) {
-                    var box = createSubjectBox(subjects[i]);
+                    var box = createSubjectBox(subjects[i].innerHTML);
                     box.classList.remove("hover-button");
                     container.appendChild(box);
                 }
