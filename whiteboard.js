@@ -95,6 +95,7 @@ function initCanvas() {
 	c.addEventListener('mousedown', startDraw, false);
 	c.addEventListener('mousemove', throttle(drawPt, 10), false);
 	c.addEventListener('mouseup', stopDraw, false);
+	c.addEventListener('mouseleave', stopDraw, false);
 	var buttons = document.getElementsByClassName('button');
 	buttons[0].style.backgroundColor = CLICKED;
 	for (var i = 1; i < buttons.length; i++) {

@@ -4,9 +4,12 @@ var $ = function(id) {
 };
 
 var socket = io.connect();
-var data;
+var data, first;
+const HEIGHT = 200;
+const EPSILON = 10;
 
 window.onload = function() {
+    first = true;
     setupListeners();
     data = read_cookie("data");
 }
@@ -47,6 +50,16 @@ function addMessage(text, clear) {
     var innerText = document.createElement("p");
     innerText.innerHTML = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     line.appendChild(innerText);
+    scroll = false;
+    if (Math.abs($("chat").scrollTop + HEIGHT - $("chat").scrollHeight) < EPSILON || clear) {
+        scroll = true;
+    }
     $("chat").appendChild(line);
+    if (first) {
+        $("chat").scrollTop = $("chat").scrollHeight;
+        first = false;
+    } else if (scroll) {
+        $("chat").scrollTop = $("chat").scrollHeight;
+    }
     if (clear) $("textfield").value = "";
 }
