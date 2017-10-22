@@ -1,6 +1,8 @@
 var c, ctx, drawing;
 var down, eraser, colors, text;
 var size, jscolor;
+var canvases;
+var curr;
 
 const CLICKED = "red";
 const NOT_CLICKED = "#90caf9";
@@ -9,9 +11,12 @@ const HOVER = "#dcdcdc";
 const HOVER_RGB = "rgb(220, 220, 220)";
 
 window.onload = function() {
+	curr = 0;
+	canvases = [];
 	initCanvas();
 	initButtons();
 	initSizes();
+	ctx.save();
 };
 
 function initCanvas() {
@@ -33,6 +38,9 @@ function initCanvas() {
 	for (var i = 1; i < buttons.length; i++) {
 		buttons[i].style.backgroundColor = NOT_CLICKED;
 	}
+	buttons = document.getElementsByClassName('canvas-button');
+	buttons[0].style.opacity = 0.2;
+	buttons[1].style.opacity = 0.2;
 }
 
 function initButtons() {
@@ -42,6 +50,7 @@ function initButtons() {
 	colors = false;
 	text = false;
 	extendSizes(false);
+	extendColors(false);
 	var buttons = document.getElementsByClassName('button');
 	buttons[0].onclick = function() {
 		ctx.strokeStyle = "#000000";
@@ -64,7 +73,7 @@ function initButtons() {
 		colors = false;
 		text = false;
 		extendColors(false);
-		c.style.cursor = csrFormat(2 * size, false);
+		c.style.cursor = csrFormat(4 * size, false);
 		buttons[0].style.backgroundColor = NOT_CLICKED;
 		buttons[1].style.backgroundColor = CLICKED;
 		buttons[2].style.backgroundColor = NOT_CLICKED;
@@ -113,6 +122,76 @@ function initButtons() {
 			}
 		}, false);
 	}
+
+	buttons = document.getElementsByClassName('canvas-button');
+	for (var i = 0; i < buttons.length; i++) {
+		buttons[i].style.backgroundColor = NOT_CLICKED;
+		buttons[i].addEventListener('mouseenter', function(e) {
+			if (e.target.style.backgroundColor == NOT_CLICKED || e.target.style.backgroundColor == NOT_CLICKED_RGB) {
+				e.target.style.backgroundColor = HOVER;
+			}
+		}, false);
+		buttons[i].addEventListener('mouseleave', function(e) {
+			if (e.target.style.backgroundColor == HOVER || e.target.style.backgroundColor == HOVER_RGB) {
+				e.target.style.backgroundColor = NOT_CLICKED;
+			}
+		}, false);
+	}
+	buttons[0].addEventListener('mousedown', function(e) {
+		if (curr == 0 || canvases.length == 0) {
+			return;
+		}
+		curr--;
+		if (curr == 0) {
+			document.getElementById('prevPage').style.opacity = 0.2;
+		}
+		document.getElementById('nextPage').style.opacity = 1.0;
+		reset();
+		ctx.putImageData(canvases[curr], 0, 0);
+	});
+	buttons[1].addEventListener('mousedown', function(e) {
+		if (curr == canvases.length - 1 || canvases.length == 0) {
+			return;
+		}
+		curr++;
+		if (curr == canvases.length - 1) {
+			document.getElementById('nextPage').style.opacity = 0.2;
+		}
+		document.getElementById('prevPage').style.opacity = 1.0;
+		reset();
+		ctx.putImageData(canvases[curr], 0, 0);
+	});
+	buttons[2].addEventListener('mousedown', function(e) {
+		var data = ctx.getImageData(0, 0, c.width, c.height);
+		canvases.push(data);
+		curr += 1;
+		reset();
+		document.getElementById('prevPage').style.opacity = 1.0;
+		document.getElementById('nextPage').style.opacity = 0.2;
+	});
+}
+
+function reset() {
+	var buttons = document.getElementsByClassName('button');
+	buttons[0].style.backgroundColor = CLICKED;
+	for (var i = 1; i < buttons.length; i++) {
+		buttons[i].style.backgroundColor = NOT_CLICKED;
+	}
+	buttons = document.getElementsByClassName('sizechoice');
+	buttons[0].style.backgroundColor = CLICKED;
+	for (var i = 1; i < buttons.length; i++) {
+		buttons[i].style.backgroundColor = NOT_CLICKED;
+	}
+	drawing = false;
+	down = false;
+	eraser = false;
+	colors = false;
+	text = false;
+	extendSizes(false);
+	extendColors(false);
+	ctx.clearRect(0, 0, c.width, c.height);
+	ctx.restore();
+	ctx.save();
 }
 
 function extendSizes(extend) {
@@ -152,9 +231,9 @@ function initSizes() {
 			return function() {
 				size = Math.pow(2, j);
 				if (!text) {
-					c.style.cursor = csrFormat(size, !eraser);
+					c.style.cursor = csrFormat((eraser ? 4 : 2) * size, !eraser);
 				}
-				ctx.lineWidth = Math.pow(2, j);
+				ctx.lineWidth = (eraser ? 4 : 2) * Math.pow(2, j);
 				for (var k = 0; k < buttons.length; k++) {
 					buttons[k].style.backgroundColor = (k == j) ? CLICKED : NOT_CLICKED;
 				}

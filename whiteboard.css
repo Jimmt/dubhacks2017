@@ -12,6 +12,25 @@
 	position: relative;
 }
 
+#canvasRow {
+	display: flex;
+	height: 40px;
+	width: 100%;
+}
+
+.canvas-button {
+	position: relative;
+	margin-top: 10px;
+	margin-left: 5px;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+}
+
+#newPage {
+	margin-left: auto;
+}
+
 body {
 	overflow: hidden;
 }
