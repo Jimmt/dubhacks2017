@@ -45,7 +45,7 @@ function addMessage(text, clear) {
     line.classList.add("line");
     if (clear) line.classList.add("mine");
     var innerText = document.createElement("p");
-    innerText.innerHTML = text;
+    innerText.innerHTML = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     line.appendChild(innerText);
     $("chat").appendChild(line);
     if (clear) $("textfield").value = "";
