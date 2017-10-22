@@ -43,6 +43,7 @@ function initCanvas() {
 	buttons = document.getElementsByClassName('canvas-button');
 	buttons[0].style.opacity = 0.2;
 	buttons[1].style.opacity = 0.2;
+	document.getElementById('counter').innerHTML = "1/1";
 }
 
 function initButtons() {
@@ -136,6 +137,8 @@ function initButtons() {
 	for (var i = 0; i < buttons.length; i++) {
 		buttons[i].style.backgroundColor = NOT_CLICKED;
 		buttons[i].addEventListener('mouseenter', function(e) {
+			console.log(e.target.style.backgroundColor);
+			console.log(NOT_CLICKED_RGB)
 			if ((e.target.style.backgroundColor == NOT_CLICKED || e.target.style.backgroundColor == NOT_CLICKED_RGB) && e.target.style.opacity == 1) {
 				e.target.style.backgroundColor = HOVER;
 			}
@@ -154,6 +157,7 @@ function initButtons() {
 			return;
 		}
 		canvases[curr] = ctx.getImageData(0, 0, c.width, c.height);
+		document.getElementById('counter').innerHTML = (curr + 1) + '/' + total;
 		curr--;
 		if (curr == 0) {
 			prevPage.style.opacity = 0.2;
@@ -168,6 +172,7 @@ function initButtons() {
 		}
 		canvases[curr] = ctx.getImageData(0, 0, c.width, c.height)
 		curr++;
+		document.getElementById('counter').innerHTML = (curr + 1) + '/' + total;
 		if (curr == canvases.length - 1) {
 			nextPage.style.opacity = 0.2;
 		}
@@ -177,12 +182,13 @@ function initButtons() {
 	});
 	newPage.addEventListener('mousedown', function(e) {
 		var data = ctx.getImageData(0, 0, c.width, c.height);
-		canvases.push(data);
-		curr += 1;
+		canvases[curr] = data;
+		curr = total;
 		total++;
 		reset();
 		prevPage.style.opacity = 1.0;
 		nextPage.style.opacity = 0.2;
+		document.getElementById('counter').innerHTML = (curr + 1) + '/' + total
 	});
 }
 
