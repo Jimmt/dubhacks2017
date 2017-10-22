@@ -1,15 +1,29 @@
-<html>
+<!-- color picker from http://jscolor.com/ -->
 
+<html>
 <head>
 	<link rel="stylesheet" type="text/css" href="index.css">
-    <script src="index.js"></script>
+    <script src="whiteboard.js"></script>
+    <script src="jscolor.js"></script>
 </head>
 
 <body>
 	<div id="buttons">
 		<div class="button" id="brush">brush</div>
 		<div class="button" id="eraser">eraser</div>
-		<div class="button" id="colors">colors</div>
+		<div id="sizeWrapper">
+			<div class="button" id="size">size</div>
+			<div id="sizerow">
+				<div class="sizechoice"><img src="img/csr/1_filled.png"></div>
+				<div class="sizechoice"><img src="img/csr/2_filled.png"></div>
+				<div class="sizechoice"><img src="img/csr/4_filled.png"></div>
+				<div class="sizechoice"><img src="img/csr/8_filled.png"></div>
+			</div>
+		</div>
+		<div id="colorWrapper">
+			<div class="button" id="color">color</div>
+			<input class="jscolor{value:'#000000', padding:0, shadow:false, borderWidth: 0, onFineChange:'update(this)'}" id="picker">
+		</div>
 	</div>
 	<canvas id='c'></canvas>
 </body>
