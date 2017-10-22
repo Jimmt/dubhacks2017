@@ -4,6 +4,7 @@ var size, jscolor;
 var canvases;
 var curr, total;
 var brush, eraserButton, textInput, sizeButton, palette, clearButton, prevPage, nextPage, newPage;
+var prevX, prevY;
 
 const CLICKED = "red";
 const NOT_CLICKED = "#90caf9";
@@ -11,7 +12,8 @@ const NOT_CLICKED_RGB = "rgb(144, 202, 249)";
 const HOVER = "#dcdcdc";
 const HOVER_RGB = "rgb(220, 220, 220)";
 
-window.onload = function() {
+old = window.onload;
+load = function() {
 	curr = 0;
 	total = 1;
 	canvases = [];
@@ -19,7 +21,22 @@ window.onload = function() {
 	initButtons();
 	initSizes();
 	ctx.save();
+	socket.on("drawLine", drawLine);
 };
+
+function drawLine(data) {
+	ctx.beginPath();
+	ctx.moveTo(data.x0, data.y0);
+	ctx.lineTo(data.x1, data.y1);
+	ctx.strokeStyle = data.color;
+	ctx.lineWidth = data.width;
+	ctx.stroke();
+}
+
+window.onload = function() {
+	old();  
+	load();
+}
 
 function initCanvas() {
 	c = document.getElementById('c');
@@ -28,7 +45,7 @@ function initCanvas() {
 	c.width = c.clientWidth;
 	size = 1;
 	c.addEventListener('mousedown', startDraw, false);
-	c.addEventListener('mousemove', drawPt, false);
+	c.addEventListener('mousemove', throttle(drawPt, 10), false);
 	c.addEventListener('mouseup', stopDraw, false);
 	var buttons = document.getElementsByClassName('button');
 	buttons[0].style.backgroundColor = CLICKED;
@@ -275,6 +292,9 @@ function startDraw(e) {
 		colors = false;
 		down = false;
 		extendColors(false);
+		prevX = currX;
+		prevY = currY;
+
 	}
 }
 
@@ -284,6 +304,16 @@ function drawPt(e) {
 		var currY = e.clientY - c.offsetTop + 0.5;
 		ctx.lineTo(currX, currY);
 		ctx.stroke();
+		socket.emit('drawing', {
+			x0: prevX,
+			y0: prevY,
+			x1: currX,
+			y1: currY,
+			color: ctx.strokeStyle,
+			width: ctx.lineWidth
+		});
+		prevX = currX;
+		prevY = currY;
 	}
 }
 
@@ -313,6 +343,18 @@ function stopDraw(e) {
 			input.style.width = Math.min(width + (input.style.fontSize.substring(0, input.style.fontSize.length - 2) / 2 + 4), c.width - input.style.left.substring(0, input.style.left.length - 2)) + "px";
 		}
 	}
+}
+
+function throttle(callback, delay) {
+	var previousCall = new Date().getTime();
+    return function() {
+      var time = new Date().getTime();
+
+      if ((time - previousCall) >= delay) {
+        previousCall = time;
+        callback.apply(null, arguments);
+      } 	
+    };
 }
 
 function csrFormat(num, filled) {

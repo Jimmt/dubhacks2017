@@ -22,7 +22,14 @@ io.on("connection", function(socket) {
     	console.log(data);
         io.emit("stream", { stream: data.stream });
     });
+    socket.on("drawing", function(data) {
+        socket.broadcast.emit("drawLine", data);
+    });
+    socket.on("pageChange", function(data) {
+        socket.broadcast.emit("drawPage", data);
+    })
 });
+
 
 server.listen(process.env.PORT || 5000, function() {
     console.log("listening on 5000");
