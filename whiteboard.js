@@ -2,7 +2,7 @@ var c, ctx, drawing;
 var down, eraser, colors, text;
 var size, jscolor;
 var canvases;
-var curr;
+var curr, total;
 var brush, eraserButton, textInput, sizeButton, palette, clearButton, prevPage, nextPage, newPage;
 
 const CLICKED = "red";
@@ -13,6 +13,7 @@ const HOVER_RGB = "rgb(220, 220, 220)";
 
 window.onload = function() {
 	curr = 0;
+	total = 1;
 	canvases = [];
 	initCanvas();
 	initButtons();
@@ -149,9 +150,10 @@ function initButtons() {
 	nextPage = buttons[1];
 	newPage = buttons[2];
 	prevPage.addEventListener('mousedown', function(e) {
-		if (curr == 0 || canvases.length == 0) {
+		if (curr == 0 || total == 1) {
 			return;
 		}
+		canvases[curr] = ctx.getImageData(0, 0, c.width, c.height);
 		curr--;
 		if (curr == 0) {
 			prevPage.style.opacity = 0.2;
@@ -161,9 +163,10 @@ function initButtons() {
 		ctx.putImageData(canvases[curr], 0, 0);
 	});
 	nextPage.addEventListener('mousedown', function(e) {
-		if (curr == canvases.length - 1 || canvases.length == 0) {
+		if (curr == total - 1 || total == 1) {
 			return;
 		}
+		canvases[curr] = ctx.getImageData(0, 0, c.width, c.height);
 		curr++;
 		if (curr == canvases.length - 1) {
 			nextPage.style.opacity = 0.2;
@@ -176,6 +179,7 @@ function initButtons() {
 		var data = ctx.getImageData(0, 0, c.width, c.height);
 		canvases.push(data);
 		curr += 1;
+		total++;
 		reset();
 		prevPage.style.opacity = 1.0;
 		nextPage.style.opacity = 0.2;
