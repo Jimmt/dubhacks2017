@@ -3,6 +3,7 @@ var down, eraser, colors, text;
 var size, jscolor;
 var canvases;
 var curr;
+var brush, eraserButton, textInput, sizeButton, palette, clearButton, prevPage, nextPage, newPage;
 
 const CLICKED = "red";
 const NOT_CLICKED = "#90caf9";
@@ -52,7 +53,14 @@ function initButtons() {
 	extendSizes(false);
 	extendColors(false);
 	var buttons = document.getElementsByClassName('button');
-	buttons[0].onclick = function() {
+	brush = buttons[0];
+	eraserButton = buttons[1];
+	textInput = buttons[2];
+	sizeButton = buttons[3];
+	palette = buttons[4];
+	clearButton = buttons[5];
+
+	brush.onclick = function() {
 		ctx.strokeStyle = "#000000";
 		extendSizes(false);
 		down = false;
@@ -61,11 +69,11 @@ function initButtons() {
 		text = false;
 		extendColors(false);
 		c.style.cursor = csrFormat(2 * size, true);
-		buttons[0].style.backgroundColor = CLICKED;
-		buttons[1].style.backgroundColor = NOT_CLICKED;
-		buttons[2].style.backgroundColor = NOT_CLICKED;
+		brush.style.backgroundColor = CLICKED;
+		eraserButton.style.backgroundColor = NOT_CLICKED;
+		textInput.style.backgroundColor = NOT_CLICKED;
 	};
-	buttons[1].onclick = function() {
+	eraserButton.onclick = function() {
 		ctx.strokeStyle ="#FFFFFF";
 		extendSizes(false);
 		down = false;
@@ -74,34 +82,34 @@ function initButtons() {
 		text = false;
 		extendColors(false);
 		c.style.cursor = csrFormat(4 * size, false);
-		buttons[0].style.backgroundColor = NOT_CLICKED;
-		buttons[1].style.backgroundColor = CLICKED;
-		buttons[2].style.backgroundColor = NOT_CLICKED;
+		brush.style.backgroundColor = NOT_CLICKED;
+		eraserButton.style.backgroundColor = CLICKED;
+		textInput.style.backgroundColor = NOT_CLICKED;
 	};
-	buttons[2].onclick = function() {
+	textInput.onclick = function() {
 		extendSizes(false);
 		extendColors(false);
 		down = false;
 		colors = false;
 		c.style.cursor = 'text';
 		text = true;
-		buttons[0].style.backgroundColor = NOT_CLICKED;
-		buttons[1].style.backgroundColor = NOT_CLICKED;
-		buttons[2].style.backgroundColor = CLICKED;
+		brush.style.backgroundColor = NOT_CLICKED;
+		eraserButton.style.backgroundColor = NOT_CLICKED;
+		textInput.style.backgroundColor = CLICKED;
 	}
-	buttons[3].onclick = function() {
+	sizeButton.onclick = function() {
 		extendSizes(!down);
 		down = !down;
 		colors = false;
 		extendColors(false);
 	};
-	buttons[4].onclick = function() {
+	palette.onclick = function() {
 		extendSizes(false);
 		down = false;
 		extendColors(!colors);
 		colors = !colors;
 	};
-	buttons[5].onclick = function() {
+	clearButton.onclick = function() {
 		drawing = false;
 		down = false;
 		eraser = false;
@@ -127,7 +135,7 @@ function initButtons() {
 	for (var i = 0; i < buttons.length; i++) {
 		buttons[i].style.backgroundColor = NOT_CLICKED;
 		buttons[i].addEventListener('mouseenter', function(e) {
-			if (e.target.style.backgroundColor == NOT_CLICKED || e.target.style.backgroundColor == NOT_CLICKED_RGB) {
+			if ((e.target.style.backgroundColor == NOT_CLICKED || e.target.style.backgroundColor == NOT_CLICKED_RGB) && e.target.style.opacity == 1) {
 				e.target.style.backgroundColor = HOVER;
 			}
 		}, false);
@@ -137,43 +145,46 @@ function initButtons() {
 			}
 		}, false);
 	}
-	buttons[0].addEventListener('mousedown', function(e) {
+	prevPage = buttons[0];
+	nextPage = buttons[1];
+	newPage = buttons[2];
+	prevPage.addEventListener('mousedown', function(e) {
 		if (curr == 0 || canvases.length == 0) {
 			return;
 		}
 		curr--;
 		if (curr == 0) {
-			document.getElementById('prevPage').style.opacity = 0.2;
+			prevPage.style.opacity = 0.2;
 		}
-		document.getElementById('nextPage').style.opacity = 1.0;
+		nextPage.style.opacity = 1.0;
 		reset();
 		ctx.putImageData(canvases[curr], 0, 0);
 	});
-	buttons[1].addEventListener('mousedown', function(e) {
+	nextPage.addEventListener('mousedown', function(e) {
 		if (curr == canvases.length - 1 || canvases.length == 0) {
 			return;
 		}
 		curr++;
 		if (curr == canvases.length - 1) {
-			document.getElementById('nextPage').style.opacity = 0.2;
+			nextPage.style.opacity = 0.2;
 		}
-		document.getElementById('prevPage').style.opacity = 1.0;
+		prevPage.style.opacity = 1.0;
 		reset();
 		ctx.putImageData(canvases[curr], 0, 0);
 	});
-	buttons[2].addEventListener('mousedown', function(e) {
+	newPage.addEventListener('mousedown', function(e) {
 		var data = ctx.getImageData(0, 0, c.width, c.height);
 		canvases.push(data);
 		curr += 1;
 		reset();
-		document.getElementById('prevPage').style.opacity = 1.0;
-		document.getElementById('nextPage').style.opacity = 0.2;
+		prevPage.style.opacity = 1.0;
+		nextPage.style.opacity = 0.2;
 	});
 }
 
 function reset() {
 	var buttons = document.getElementsByClassName('button');
-	buttons[0].style.backgroundColor = CLICKED;
+	brush.style.backgroundColor = CLICKED;
 	for (var i = 1; i < buttons.length; i++) {
 		buttons[i].style.backgroundColor = NOT_CLICKED;
 	}
@@ -289,7 +300,7 @@ function stopDraw(e) {
 			document.body.appendChild(temp);
 			var width = temp.getBoundingClientRect().width;
 			document.body.removeChild(temp);
-			input.style.width = Math.min(width + (input.style.fontSize.substring(0, input.style.fontSize.length - 2) / 2 + 2), c.width - input.style.left.substring(0, input.style.left.length - 2)) + "px";
+			input.style.width = Math.min(width + (input.style.fontSize.substring(0, input.style.fontSize.length - 2) / 2 + 4), c.width - input.style.left.substring(0, input.style.left.length - 2)) + "px";
 		}
 	}
 }
