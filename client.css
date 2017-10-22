@@ -5,6 +5,7 @@
 
 :root {
     --primary-color: #90caf9;
+    --secondary-color: rgb(220, 220, 220);
 }
 
 body {
@@ -23,17 +24,18 @@ body {
 }
 
 .raised {
-	box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2);
 }
 
 .raised-small {
-	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3);
 }
 
 #search {
     background-color: white;
     margin-top: 15px;
     padding: 20px;
+    text-align: center;
 }
 
 #header {
@@ -45,6 +47,20 @@ body {
     /*background-color: var(--primary-color);*/
 }
 
+.descriptor {
+	margin-bottom: 10px;
+}
+
+#checkboxes {
+	display: flex;
+	justify-content: center;
+}
+
+.check {
+	margin-left: 30px;
+	margin-right: 30px;
+}
+
 #secondary-subjects {
     margin-top: 15px;
     display: flex;
@@ -52,10 +68,9 @@ body {
     justify-content: center;
 }
 
-h1 {}
-
 .input-row {
-    margin-bottom: 10px;
+    margin-bottom: 35px;
+    text-align: center;
 }
 
 .wrapper {
@@ -71,7 +86,10 @@ h1 {}
 
 option {
     font-family: "Gotham";
-    font-size: 14pt;
+}
+
+#skill-slider {
+	border-radius: 100%;
 }
 
 #secondary-subject {
@@ -79,23 +97,30 @@ option {
     justify-content: center;
     align-content: center;
     flex-direction: column;
+    border-radius: 100%;
     width: 100px;
     height: 100px;
-    margin: 5px;
+    margin: 0px 5px 5px 5px;
+}
+
+.selected {
+    background-color: var(--secondary-color);
 }
 
 .hover-button {
-    transition: background-color 0.5s;
+    transition: background-color 0.5s ease-out;
 }
 
 .hover-button:hover {
-    background-color: var(--primary-color);
+    background-color: var(--secondary-color);
 }
 
 #name-field {
     width: 150px;
     font-family: "Gotham";
     font-size: 14pt;
+    border-width: 0px 0px 3px 0px;
+    border-color: black;
 }
 
 #submit-button {
@@ -112,4 +137,10 @@ option {
     margin-left: auto;
     margin-right: auto;
     margin-top: 30px;
+    transition: box-shadow 0.5s;
+    border-radius: 2px;
+}
+
+#submit-button:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3);
 }

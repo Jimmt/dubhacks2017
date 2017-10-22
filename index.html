@@ -2,6 +2,7 @@
 
 <head>
     <link rel="stylesheet" href="client.css"></link>
+    <script type="text/javascript" src="cookies.js"></script>
     <script type="text/javascript">
     var subjects2 = [
         ["Geometry", "Algebra", "Calculus", "Linear Algebra"],
@@ -15,9 +16,164 @@
 
     window.onload = function() {
         selectSubject();
+
         $("primary-subjects").onchange = function() {
             selectSubject();
         };
+        $("student").checked = true;
+        $("student").onclick = function() {
+            $("tutor").checked = !$("tutor").checked;
+        }
+        $("tutor").onclick = function() {
+            $("student").checked = !$("student").checked;
+        }
+        $("skill-slider").oninput = function() {
+            $("skill-text").innerHTML = "Skill: " + $("skill-slider").value;
+        }
+        $("submit-button").onclick = function() {
+            var success = setCookies();
+            if (success) {
+                if ($("student").checked) {
+                    showTutors(false);
+                } else {
+                    showTutors(true);
+                }
+            }
+        }
+    }
+
+    var tutors = [
+        { name: "Ronney Do", skill: 7, },
+        { name: "Justin Wang", skill: 9, },
+        { name: "Jacob Lu", skill: 4, }
+    ];
+    var tutorBlocks = [];
+
+    var showTutors = function(isTutor) {
+        var index = 0;
+        tutors.forEach(function(tutor) {
+            var tutorName = document.createElement("h1");
+            tutorName.innerHTML = tutor.name;
+            var inputRow1 = createInputRow();
+            inputRow1.appendChild(tutorName);
+            var inputRow2 = createInputRow();
+            var skill = document.createElement("div");
+            skill.innerHTML = "Skill: " + Math.floor(tutor.skill / (isTutor ? 2 : 1));
+            inputRow2.appendChild(skill);
+            var inputRow3 = createInputRow();
+            var container = document.createElement("div");
+            var subjects = read_cookie("data").subsubject;
+            for (var i = 0; i < subjects.length; i++) {
+                if (i == 0 || Math.floor(Math.random() * 2) == 1) {
+                    var box = createSubjectBox(subjects[i]);
+                    box.classList.remove("hover-button");
+                    container.appendChild(box);
+                }
+            }
+            container.style = "display: flex; justify-content: center; flex-direction: row";
+            inputRow3.appendChild(container);
+            inputRow3.style.marginBottom = "0px";
+            var block = document.createElement("div");
+            block.appendChild(inputRow1);
+            block.appendChild(inputRow2);
+            block.appendChild(inputRow3);
+            tutorBlocks.push(block);
+
+            var left = document.createElement("img");
+            left.src = "resources/arrow_left.svg";
+            var right = document.createElement("img");
+            right.src = "resources/arrow_right.svg";
+            var leftButton = document.createElement("div");
+            leftButton.appendChild(left);
+            var rightButton = document.createElement("div");
+            rightButton.appendChild(right);
+            var arrowButtons = document.createElement("div");
+            arrowButtons.style = "margin-top: 20px;";
+            leftButton.style = "display: inline-block; margin-right: 5px";
+            rightButton.style = "display: inline-block; margin-left: 5px";
+            leftButton.onclick = function() {
+                if (index > 0) {
+                    $("search").innerHTML = "";
+                    $("search").appendChild(tutorBlocks[--index]);
+                }
+            };
+            rightButton.onclick = function() {
+                if (index < tutorBlocks.length - 1) {
+                    $("search").innerHTML = "";
+                    $("search").appendChild(tutorBlocks[++index]);
+                }
+            };
+
+            arrowButtons.appendChild(leftButton);
+            arrowButtons.appendChild(rightButton);
+            var selectButton = document.createElement("div");
+            selectButton.id = "submit-button";
+            selectButton.innerHTML = isTutor ? "Help" : "Request";
+            selectButton.onclick = function() {
+                setOtherCookies(tutor);
+                console.log(isTutor);
+                alert(tutor.name + (!isTutor ? " has agreed to help you!" : " wants your help!"));
+                window.location.href = "/tutor.html";
+            }
+            block.appendChild(selectButton);
+            block.appendChild(arrowButtons);
+        });
+        $("title").innerHTML = isTutor ? "Pick a tutor" : "Pick a student";
+        $("search").innerHTML = "";
+        $("search").appendChild(tutorBlocks[0]);
+        // window.location.href = "/tutor.html";
+        var backButton = document.createElement("div");
+        backButton.id = "submit-button";
+        var p = document.createElement("p")
+        p.innerHTML = "Back";
+        backButton.appendChild(p);
+        $("body").appendChild(backButton);
+        backButton.onclick = function() {
+            window.location.href = "";
+        }
+    }
+
+    var createInputRow = function() {
+        var inputRow = document.createElement("div");
+        inputRow.className = "input-row";
+        return inputRow;
+    }
+
+    var setOtherCookies = function(other) {
+        bake_cookie("other_data", other);
+    }
+
+    var setCookies = function() {
+        var ss = getSelectedSubjects();
+        var obj = {
+            name: $("name-field").value,
+            student: $("student").checked,
+            skill: $("skill-slider").value,
+            subject: $("primary-subjects").value,
+            subsubject: ss
+        };
+        if (ss.length == 0) {
+            alert("Please select a secondary subject");
+            return false;
+        }
+        if ($("name-field").value.length == 0) {
+            alert("Please enter your name");
+            return false;
+        }
+        console.log(obj);
+        bake_cookie("data", obj);
+        return true;
+    };
+
+    var getSelectedSubjects = function() {
+        var r = [];
+        var subjs = document.querySelectorAll("#secondary-subject");
+        subjs.forEach(function(s) {
+            if (s.classList.contains("selected")) {
+                r.push(s.children[0].innerHTML);
+            }
+        });
+        return r;
     }
 
     var selectSubject = function() {
@@ -25,30 +181,56 @@
         var index = $("primary-subjects").selectedIndex;
         var subs = subjects2[index];
         subs.forEach(function(s) {
-            var subject = document.createElement("div");
-            subject.id = "secondary-subject";
-            subject.classList.add("hover-button");
-            subject.classList.add("raised-small");
-            subject.innerHTML = "<p id='inner-text'>" + s + "</p>";
+            var subject = createSubjectBox(s);
+            subject.onclick = function() {
+                if (subject.classList.contains("selected")) {
+                    subject.classList.remove("selected");
+                } else {
+                    subject.classList.add("selected");
+                }
+            };
             $("secondary-subjects").appendChild(subject);
         });
+    }
+
+    var createSubjectBox = function(text) {
+        var subject = document.createElement("div");
+        subject.id = "secondary-subject";
+        subject.classList.add("hover-button");
+        subject.classList.add("raised-small");
+        subject.innerHTML = "<p id='inner-text'>" + text + "</p>";
+        return subject;
     }
     </script>
 </head>
 
-<body>
+<body id="body">
     <div id="header">
-        <h1>Create your profile</h1>
+        <h1 id="title">Create your profile</h1>
     </div>
     <div id="search" class="raised">
         <div class="input-row">
-            <span>Name</span>
+            <div class="descriptor">Name</div>
             <div class="wrapper">
                 <input type="text" id="name-field">
             </div>
         </div>
+        <div class="input-row" id="checkboxes">
+            <span class="check">Student <input id="student" type="radio"></span>
+            <span class="check">Tutor <input id="tutor" type="radio"></span>
+        </div>
         <div class="input-row">
-            <span>Subject</span>
+            <div>
+                <p id="skill-text">Skill: 6</p>
+                <input type="range" min="1" max="10" step="1" id="skill-slider" list="ticks">
+                <datalist id="ticks">
+                    <option value="1" label="1">
+                        <option value="10" label="10">
+                </datalist>
+            </div>
+        </div>
+        <div class="input-row">
+            <div class="descriptor">Subject</div>
             <div class="wrapper">
                 <select id="primary-subjects">
                     <option value="Math">Math</option>
@@ -56,11 +238,11 @@
                     <option value="Programming">Computer Science</option>
                 </select>
             </div>
-            <div id="secondary-subjects">
-            </div>
-            <div id="submit-button" class="hover-button">
-                Submit
-            </div>
+        </div>
+        <div id="secondary-subjects">
+        </div>
+        <div id="submit-button" class="hover-button">
+            Submit
         </div>
     </div>
 </body>

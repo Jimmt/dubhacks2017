@@ -5,9 +5,11 @@ var $ = function(id) {
 };
 
 var socket = io.connect();
+var data;
 
 window.onload = function() {
     setupListeners();
+    data = read_cookie("data");
 }
 
 function setupListeners() {
@@ -15,17 +17,29 @@ function setupListeners() {
         alert("connected");
     });
 
-    socket.on("otherMessage", function(socket){
-    	$("chat").innerHTML += (socket.msg + "\n");
+    socket.on("otherMessage", function(socket) {
+        addMessage(socket.msg, false);
     });
 
     $("textfield").onkeypress = function(event) {
         if (event.which == 13 || event.keyCode == 13) {
-            socket.emit("newMessage", { msg: $("textfield").value });
-            $("chat").innerHTML += ($("textfield").value + "\n");
-            $("textfield").value = "";
+            var msg = processMessage($("textfield").value);
+            socket.emit("newMessage", { msg: msg });
+            addMessage(msg, true);
             return false;
         }
         return true;
     }
+}
+
+function processMessage(text) {
+    return data.name + ": " + text;
+}
+
+function addMessage(text, clear) {
+    var line = document.createElement("div");
+    line.className = "line";
+    line.innerHTML = text;
+    $("chat").appendChild(line);
+    if (clear) $("textfield").value = "";
 }

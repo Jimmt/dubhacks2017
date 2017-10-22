@@ -1,1 +1,39 @@
+body {
+	display: flex;
+	justify-content: center;
+	flex-direction: row;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+}
 
+#right-side {
+
+}
+
+#video {
+	border: 1px black solid;
+	width: 500px;
+	height: 500px;
+}
+
+#chat-container {
+    text-align: center;
+}
+
+#textfield {
+    border: 1px solid black;
+    width: 500px;
+}
+
+#chat {
+    border: 1px solid black;
+    width: 500px;
+    height: 200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.line {
+	text-align: left;
+}
