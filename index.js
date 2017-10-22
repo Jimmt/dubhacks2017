@@ -28,6 +28,18 @@ io.on("connection", function(socket) {
     socket.on("text", function(data) {
         socket.broadcast.emit("drawText", data);
     });
+    socket.on("newPage", function(data) {
+        socket.broadcast.emit("createPage", data);
+    });
+    socket.on("prevPage", function(data) {
+        socket.broadcast.emit("prevPage2", data);
+    });
+    socket.on("nextPage", function(data) {
+        socket.broadcast.emit("nextPage2", data);
+    });
+    socket.on("clear", function(data) {
+        socket.broadcast.emit("clearPage", data);
+    });
 });
 
 

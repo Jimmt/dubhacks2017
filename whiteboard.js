@@ -27,7 +27,47 @@ load = function() {
 		ctx.fillStyle = data.color;
 		ctx.fillText(data.text, data.left, data.top, data.max);
 	});
-};
+	socket.on("createPage", function(data) {
+		canvases[data.curr] = data.data;
+		total = data.total;
+		curr = total - 1;
+		document.getElementById('counter').innerHTML = total + '/' + total;
+		reset();
+		prevPage.style.opacity = 1.0;
+		nextPage.style.opacity = 0.2;
+	});
+	socket.on("nextPage2", function(data) {
+		canvases[data.old] = data.data;
+		curr = data.curr;
+		document.getElementById('counter').innerHTML = (curr + 1) + "/" + total;
+		if (curr == canvases.length - 1) {
+			nextPage.style.opacity = 0.2;
+		}
+		prevPage.style.opacity = 1.0;
+		reset();
+		ctx.putImageData(canvases[curr], 0, 0);	
+	});
+	socket.on("prevPage2", function(data) {
+		canvases[data.old] = data.data;
+		curr = data.curr;
+		document.getElementById('counter').innerHTML = (curr + 1) + "/" + total;
+		if (curr == 0) {
+			prevPage.style.opacity = 0.2;
+		}
+		nextPage.style.opacity = 1.0;
+		reset();
+		ctx.putImageData(canvases[curr], 0, 0);	
+	});
+	socket.on("clearPage", function(data) {
+		drawing = false;
+		down = false;
+		eraser = false;
+		colors = false;
+		extendSizes(false);
+		extendColors(false);
+		ctx.clearRect(0, 0, c.width, c.height);
+	});
+}
 
 function drawLine(data) {
 	ctx.beginPath();
@@ -141,6 +181,7 @@ function initButtons() {
 		extendSizes(false);
 		extendColors(false);
 		ctx.clearRect(0, 0, c.width, c.height);
+		socket.emit("clear");
 	}
 	for (var i = 0; i < buttons.length; i++) {
 		buttons[i].addEventListener('mouseenter', function(e) {
@@ -159,7 +200,7 @@ function initButtons() {
 	for (var i = 0; i < buttons.length; i++) {
 		buttons[i].style.backgroundColor = NOT_CLICKED;
 		buttons[i].addEventListener('mouseenter', function(e) {
-			if ((e.target.style.backgroundColor == NOT_CLICKED || e.target.style.backgroundColor == NOT_CLICKED_RGB) && e.target.style.opacity == 1) {
+			if ((e.target.style.backgroundColor == NOT_CLICKED || e.target.style.backgroundColor == NOT_CLICKED_RGB) && (e.target.style.opacity == 1 || !e.target.style.opacity)) {
 				e.target.style.backgroundColor = HOVER;
 			}
 		}, false);
@@ -177,20 +218,28 @@ function initButtons() {
 			return;
 		}
 		canvases[curr] = ctx.getImageData(0, 0, c.width, c.height);
-		document.getElementById('counter').innerHTML = (curr + 1) + '/' + total;
+		var data = canvases[curr];
 		curr--;
+		document.getElementById('counter').innerHTML = (curr + 1) + '/' + total;
 		if (curr == 0) {
 			prevPage.style.opacity = 0.2;
 		}
 		nextPage.style.opacity = 1.0;
 		reset();
 		ctx.putImageData(canvases[curr], 0, 0);
+		socket.emit("prevPage", {
+			old: old,
+			curr: curr,
+			data: data
+		});
 	});
 	nextPage.addEventListener('mousedown', function(e) {
 		if (curr == total - 1 || total == 1) {
 			return;
 		}
+		var old = curr;
 		canvases[curr] = ctx.getImageData(0, 0, c.width, c.height)
+		var data = canvases[curr];
 		curr++;
 		document.getElementById('counter').innerHTML = (curr + 1) + '/' + total;
 		if (curr == canvases.length - 1) {
@@ -198,17 +247,28 @@ function initButtons() {
 		}
 		prevPage.style.opacity = 1.0;
 		reset();
-		ctx.putImageData(canvases[curr], 0, 0);
+		ctx.putImageData(canvases[curr], 0, 0);	
+		socket.emit("nextPage", {
+			old: old,
+			curr: curr,
+			data: data
+		});
 	});
 	newPage.addEventListener('mousedown', function(e) {
 		var data = ctx.getImageData(0, 0, c.width, c.height);
 		canvases[curr] = data;
+		var old = curr;
 		curr = total;
 		total++;
 		reset();
 		prevPage.style.opacity = 1.0;
 		nextPage.style.opacity = 0.2;
-		document.getElementById('counter').innerHTML = (curr + 1) + '/' + total
+		document.getElementById('counter').innerHTML = (curr + 1) + '/' + total;
+		socket.emit("newPage", {
+			total: total,
+			curr: old,
+			data: data
+		});
 	});
 }
 
