@@ -338,7 +338,7 @@ function startDraw(e) {
 		var currY = e.clientY - c.offsetTop + 0.5;
 		ctx.moveTo(currX, currY);
 		ctx.beginPath();
-		ctx.strokeStyle = jscolor;
+		ctx.strokeStyle = (eraser) ? "#FFFFFF" : jscolor;
 		extendSizes(false);
 		drawing = true;
 		colors = false;
